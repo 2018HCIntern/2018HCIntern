@@ -12,3 +12,12 @@
 ## Dataset
 * Predict Grant Applications
 	* https://www.kaggle.com/c/unimelb/data
+
+## Git
+'''
+git clone https://github.com/2018HCIntern/2018HCIntern
+git add *
+git commit -m 'something improved...'
+git push origin master
+git pull origin master
+'''
