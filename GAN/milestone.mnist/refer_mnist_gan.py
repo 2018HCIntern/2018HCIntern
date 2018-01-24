@@ -60,11 +60,6 @@ def show_result(num_epoch, show = False, save = False, path = 'result.png', isFi
 
     G.eval()
     if isFix:
-        test_images = G(fixed_z_)
-    else:
-        test_images = G(z_)
-    G.train()
-
     size_figure_grid = 5
     fig, ax = plt.subplots(size_figure_grid, size_figure_grid, figsize=(5, 5))
     for i, j in itertools.product(range(size_figure_grid), range(size_figure_grid)):
