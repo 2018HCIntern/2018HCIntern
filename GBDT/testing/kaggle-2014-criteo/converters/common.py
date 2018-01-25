@@ -25,7 +25,7 @@ def gen_feats(row):
                 value = 'SP'+str(value)
         key = field + '-' + str(value)
         feats.append(key)
-    for j in range(1, 27):
+    for j in range(1, 25):
         field = 'C{0}'.format(j)
         value = row[field]
         key = field + '-' + value
