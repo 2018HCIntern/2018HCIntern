@@ -10,6 +10,6 @@ setup(
     entry_points='''
         [console_scripts]
         gen=augmentator:augmentation
-        pre=preprocessing:preprocess
+        pre=preprocessor:preprocess
     ''',
 )

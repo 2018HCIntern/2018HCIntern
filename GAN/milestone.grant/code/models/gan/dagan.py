@@ -5,6 +5,9 @@ import torch.optim as optim
 import torch.cuda as tcuda
 from torch.autograd import Variable
 
+from .gan import GAN
+
+
 class DAGAN(GAN):
     """
 
@@ -27,3 +30,17 @@ class DAGAN(GAN):
             self.
 
         def forward(self, z):
+            return None
+
+    def __init__(self):
+        super().__init__()
+        return
+
+    def train(self, epoch_num=10):
+        return None
+
+    def generate(self, gen_num=10):
+        return None
+
+    def save(self, generator_path, discriminator_path):
+        super().save(generator_path, discriminator_path)

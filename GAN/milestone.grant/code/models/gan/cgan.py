@@ -7,6 +7,7 @@ from torch.autograd import Variable
 
 from .gan import GAN
 
+
 class CGAN(GAN):
     """
     z_size <-- Generator Input Size
@@ -89,13 +90,13 @@ class CGAN(GAN):
 
     def train(self, epoch_num=10):
         for epoch in range(epoch_num):
-            for x, _ in self.train_loader:
+            for x, y in self.train_loader:
                 self.D.zero_grad()
                 batch_size = self.batch_size
                 y_real = torch.ones(batch_size)
                 y_fake = torch.zeros(batch_size)
                 y_label = torch.zeros(batch_size, self.class_num)
-                y_label.scatter_(1, y_pred.view(batch_size, 1), 1)
+                y_label.scatter_(1, y.view(batch_size, 1), 1)
 
                 if tcuda.is_available():
                     x, y_real, y_fake, y_label = x.cuda(), y_real.cuda(), y_fake.cuda(), y_label.cuda()
@@ -144,5 +145,4 @@ class CGAN(GAN):
         return results
 
     def save(self, generator_path, discriminator_path):
-        torch.save(self.G.state_dict(), generator_path)
-        torch.save(self.D.state_dict(), discriminator_path)
+        super().save(generator_path, discriminator_path)
