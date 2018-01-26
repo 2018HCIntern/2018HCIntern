@@ -5,6 +5,11 @@ import torch.optim as optim
 import torch.cuda as tcuda
 from torch.autograd import Variable
 
+import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 class GAN:
     """
@@ -47,8 +52,9 @@ class GAN:
 
     def __init__(
             self, train_loader,
-            batch_size, learning_rate=2e-4,
-            z_size=100, x_size=28*28, y_size=1, class_num=10):
+            batch_size, learning_rate=2e-5,
+            z_size=100, x_size=28*28, y_size=1, class_num=10,
+            verbose=True):
         self.batch_size = batch_size
         self.train_loader = train_loader
         self.G = self.Generator(z_size=z_size, x_size=x_size)
@@ -63,52 +69,70 @@ class GAN:
         self.D_optimizer = optim.Adam(self.D.parameters(), lr=learning_rate)
 
     def train(self, epoch_num=10):
+
         for epoch in range(epoch_num):
+            generator_losses = []
+            discriminator_losses = []
             for x, _ in self.train_loader:
                 self.D.zero_grad()
                 y_real = torch.ones(self.batch_size)
                 y_fake = torch.zeros(self.batch_size)
+
                 if tcuda.is_available():
                     x, y_real, y_fake = x.cuda(), y_real.cuda(), y_fake.cuda()
                 x, y_real, y_fake = Variable(x), Variable(y_real), Variable(y_fake)
-
                 y = self.D(x)
-                real_loss = self.BCE_loss(y, y_real)
+                real_loss = self.BCE_loss(y.squeeze(), y_real)
 
-                z = torch.randn((self.batch_size, self.z_size))
+                # z = torch.randn((self.batch_size, self.z_size))
+                z = torch.rand((self.batch_size, self.z_size))
+
                 if tcuda.is_available():
                     z = z.cuda()
                 z = Variable(z)
 
                 y = self.D(self.G(z))
-                fake_loss = self.BCE_loss(y, y_fake)
+                fake_loss = self.BCE_loss(y.squeeze(), y_fake)
 
                 discriminator_loss = real_loss + fake_loss
                 discriminator_loss.backward()
+                discriminator_losses.append(discriminator_loss.data[0])
                 self.D_optimizer.step()
 
                 self.G.zero_grad()
-                z = torch.randn((self.batch_size, self.z_size))
+                # z = torch.randn((self.batch_size, self.z_size))
+                z = torch.rand((self.batch_size, self.z_size))
+
                 y_fake = torch.ones(self.batch_size)
 
                 if tcuda.is_available():
                     z, y_fake = z.cuda(), y_fake.cuda()
-                z, y_fake = Variable(z), Variable(y)
+                z, y_fake = Variable(z), Variable(y_fake)
 
                 y = self.D(self.G(z))
-                generator_loss = self.BCE_loss(y, y_fake)
+                generator_loss = self.BCE_loss(y.squeeze(), y_fake)
                 generator_loss.backward()
-                self.G_optimizer.step()
+                generator_losses.append(generator_loss.data[0])
+                self.step = self.G_optimizer.step()
+
+            logging.info('Training [%d:%d] D Loss %.6f, G Loss %.6f',
+                         epoch + 1, epoch_num,
+                         sum(generator_losses) / len(generator_losses),
+                         sum(discriminator_losses) / len(discriminator_losses))
 
     def generate(self, gen_num=10):
-        z = torch.randn((gen_num, self.z_size))
+        # z = torch.randn((gen_num, self.z_size))
+        z = torch.rand((gen_num, self.z_size))
         if tcuda.is_available():
             z = z.cuda()
         z = Variable(z)
         self.G.eval()
         results = self.G(z)
         self.G.train()
-        return results
+        return pd.DataFrame(
+            results.data.numpy(),
+            columns=self.train_loader.dataset.df.columns.drop([self.train_loader.dataset.y_attr])
+        )
 
     def save(self, generator_path, discriminator_path):
         torch.save(self.G.state_dict(), generator_path)
