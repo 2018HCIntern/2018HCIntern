@@ -51,7 +51,7 @@ class DataframeDataset(Dataset):
         data = item.drop(self.y_attr).as_matrix()
         labels = item[self.y_attr]
         data = data.astype('float32')
-        labels = labels.astype('float32')
+        labels = labels.astype('long')
         return (data, labels)
 
 

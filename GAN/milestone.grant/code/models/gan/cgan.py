@@ -8,6 +8,11 @@ from torch.autograd import Variable
 
 from .gan import GAN
 
+import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 class CGAN(GAN):
     """
@@ -34,7 +39,7 @@ class CGAN(GAN):
 
         def forward(self, z, c):
             z_1 = F.relu(self.fc1_1_bn(self.fc1_1(z)))
-            z_2 = F.relu(self.fc1_2_bn(self.fc1_2(z)))
+            z_2 = F.relu(self.fc1_2_bn(self.fc1_2(c)))
             z = torch.cat([z_1, z_2], 1)
             z = F.relu(self.fc2_bn(self.fc2(z)))
             z = F.relu(self.fc3_bn(self.fc3(z)))
@@ -58,7 +63,7 @@ class CGAN(GAN):
 
         def forward(self, x, c):
             x_1 = F.leaky_relu(self.fc1_1(x), 0.2)
-            x_2 = F.leaky_relu(self.fc1_2(x), 0.2)
+            x_2 = F.leaky_relu(self.fc1_2(c), 0.2)
             x = torch.cat([x_1, x_2], 1)
             x = F.leaky_relu(self.fc2_bn(self.fc2(x)), 0.2)
             x = F.leaky_relu(self.fc3_bn(self.fc3(x)), 0.2)
@@ -95,6 +100,9 @@ class CGAN(GAN):
 
     def train(self, epoch_num=10):
         for epoch in range(epoch_num):
+            generator_losses = []
+            discriminator_losses = []
+
             self.G_scheduler.step()
             self.D_scheduler.step()
 
@@ -126,12 +134,14 @@ class CGAN(GAN):
 
                 train_loss = real_loss + fake_loss
                 train_loss.backward()
+                discriminator_losses.append(train_loss.data[0])
+
                 self.D_optimizer.step()
 
                 self.G.zero_grad()
                 z = torch.rand((batch_size, self.z_size))
-                y_pred = (torch.rand(batch_size, 1) * self.z_size).type(torch.LongTensor)
-                y_label = torch.zeros(batch_size, self.z_size)
+                y_pred = (torch.rand(batch_size, 1) * self.class_num).type(torch.LongTensor)
+                y_label = torch.zeros(batch_size, self.class_num)
                 y_label.scatter_(1, y_pred.view(batch_size, 1), 1)
 
                 if tcuda.is_available():
@@ -140,7 +150,15 @@ class CGAN(GAN):
                 y_pred = self.D(self.G(z, y_label), y_label).squeeze()
                 train_loss = self.BCE_loss(y_pred, y_real)
                 train_loss.backward()
+                generator_losses.append(train_loss.data[0])
+
                 self.G_optimizer.step()
+
+            logging.info('Training [%d:%d] D Loss %.6f, G Loss %.6f',
+                         epoch + 1, epoch_num,
+                         sum(generator_losses) / len(generator_losses),
+                         sum(discriminator_losses) / len(discriminator_losses))
+
 
     def generate(self, gen_num=10):
         z = torch.rand(gen_num, self.z_size + self.class_num)
