@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torch.cuda as tcuda
+from torch.optim.lr_scheduler import MultiStepLR
 from torch.autograd import Variable
 
 from .gan import GAN
@@ -48,7 +49,7 @@ class CGAN(GAN):
             self.fc2 = nn.Linear(self.fc1_1.out_features + self.fc1_2.out_features, 512)
             self.fc2_bn = nn.BatchNorm1d(self.fc2.out_features)
             self.fc3 = nn.Linear(self.fc2.out_features, 256)
-            self.fc3_bn = nn.Linear(self.fc3.out_features)
+            self.fc3_bn = nn.BatchNorm1d(self.fc3.out_features)
             self.fc4 = nn.Linear(self.fc3.out_features, y_size)
 
         def weight_init(self, mean, std):
@@ -74,22 +75,29 @@ class CGAN(GAN):
             self, train_loader,
             batch_size, learning_rate=2e-4,
             z_size=100, x_size=28*28, y_size=1, class_num=10):
-        super().__init__(
-            train_loader, batch_size, learning_rate,
-            z_size, x_size, y_size, class_num)
+        self.batch_size = batch_size
+        self.train_loader = train_loader
         self.G = self.Generator(z_size=z_size, x_size=x_size, class_num=class_num)
         self.D = self.Discriminator(x_size=x_size, y_size=y_size, class_num=class_num)
-        self.class_num = self.class_num
+        self.z_size = z_size
+        self.class_num = class_num
 
         # todo --> customizable
         self.BCE_loss = nn.BCELoss()
 
         # todo --> customizable
+        # todo --> weight decay setting
         self.G_optimizer = optim.Adam(self.G.parameters(), lr=learning_rate)
         self.D_optimizer = optim.Adam(self.D.parameters(), lr=learning_rate)
+        self.G_scheduler = MultiStepLR(self.G_optimizer, milestones=[30, 40], gamma=0.1)
+        self.D_scheduler = MultiStepLR(self.D_optimizer, milestones=[30, 40], gamma=0.1)
+
 
     def train(self, epoch_num=10):
         for epoch in range(epoch_num):
+            self.G_scheduler.step()
+            self.D_scheduler.step()
+
             for x, y in self.train_loader:
                 self.D.zero_grad()
                 batch_size = self.batch_size
