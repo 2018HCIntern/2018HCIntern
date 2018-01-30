@@ -5,7 +5,6 @@ import click
 import logging
 from models.gan.model import GANDict
 
-
 @click.command()
 @click.option('--gan', default='GAN', help='Input prefer GAN Model')
 @click.option('--size', type=int, help='Input the number of Generated Data')
@@ -16,21 +15,28 @@ from models.gan.model import GANDict
 @click.option('--y', default='y', help='Input the column name of y label')
 @click.option('--z-size', default=100, help='Input the size of random distribution')
 @click.option('--batch-size', default=128, help='Input mini batch size')
-def augmentation(gan, size, ratio, dataframe, dataset, y, z_size, batch_size):
+@click.option('--epoch-num', default=100, help='Input epoch number')
+def augmentation(gan, size, ratio, dataframe, dataset, y, z_size, batch_size, epoch_num):
     check_arguments(size, ratio, dataframe, dataset, y)
     df = pd.read_csv(dataframe)
     df_mean = df.mean()
     df_std = df.std()
-    df = (df - df_mean) / df_std
+
+    df_max = df.max()
+    df_min = df.min()
+
+    # df = (df - df_mean) / df_std
+    df = (df - df_min) / (df_max - df_min)
     train_loader = load_data(df, dataset, y, batch_size)
     x_size = train_loader.dataset.x_size
     class_num = train_loader.dataset.class_num
     GAN = GANDict[gan](train_loader, batch_size=batch_size, z_size=z_size, x_size=x_size, class_num=class_num)
-    GAN.train(100)
+    GAN.train(epoch_num)
     if ratio is not None:
         size = ratio * len(train_loader.dataset)
     gen_data = GAN.generate(size)
-    gen_data = gen_data * df_std + df_mean
+    # gen_data = gen_data * df_std + df_mean
+    gen_data = gen_data * (df_max - df_min) + df_min
     print(gen_data)
     return GAN, pd.concat([df, gen_data])
 
