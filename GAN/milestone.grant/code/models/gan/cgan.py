@@ -11,9 +11,6 @@ from .gan import GAN
 import pandas as pd
 import logging
 
-from tqdm import tqdm
-
-
 logging.basicConfig(level=logging.INFO)
 
 
@@ -102,7 +99,6 @@ class CGAN(GAN):
 
 
     def train(self, epoch_num=10):
-        # pbar = tqdm(total=epoch_num)
         for epoch in range(epoch_num):
             generator_losses = []
             discriminator_losses = []
@@ -134,7 +130,7 @@ class CGAN(GAN):
                     z, y_label = z.cuda(), y_label.cuda()
                 z, y_label = Variable(z), Variable(y_label)
                 y_pred = self.D(self.G(z, y_label), y_label).squeeze()
-                fake_loss = self.BCE_loss(y_pred, y_fake)
+                fake_loss = self.BCE_loss(y_pred, y_real)
 
                 train_loss = real_loss + fake_loss
                 train_loss.backward()
@@ -162,30 +158,17 @@ class CGAN(GAN):
                          epoch + 1, epoch_num,
                          sum(generator_losses) / len(generator_losses),
                          sum(discriminator_losses) / len(discriminator_losses))
-            # pbar.update(1)
 
 
     def generate(self, gen_num=10):
-        z = torch.rand(gen_num, self.z_size)
-        gen_num_per_class = gen_num // self.class_num
-        c = torch.zeros(gen_num_per_class, 1)
-        for i in range(self.class_num - 1):
-            t = torch.ones(gen_num_per_class, 1) + i
-            c = torch.cat([c, t], 0)
-        l = torch.zeros(gen_num, self.class_num)
-        l.scatter_(1, c.type(torch.LongTensor), 1)
-        l = Variable(l, volatile=True)
+        z = torch.rand(gen_num, self.z_size + self.class_num)
         if tcuda.is_available():
-            z, c = z.cuda(), c.cuda()
-        z, c = Variable(z), Variable(c)
+            z = z.cuda()
+        z = Variable(z)
         self.G.eval()
-        results = self.G(z, l)
+        results = self.G(z)
         self.G.train()
-        results = torch.cat([results, c], 1)
-        return pd.DataFrame(
-            results.data.numpy(),
-            columns=self.train_loader.dataset.df.columns
-        )
+        return results
 
     def save(self, generator_path, discriminator_path):
         super().save(generator_path, discriminator_path)

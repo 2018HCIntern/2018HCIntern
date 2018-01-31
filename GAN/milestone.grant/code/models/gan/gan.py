@@ -121,6 +121,7 @@ class GAN:
                          sum(discriminator_losses) / len(discriminator_losses))
 
     def generate(self, gen_num=10):
+        # z = torch.randn((gen_num, self.z_size))
         z = torch.rand((gen_num, self.z_size))
         if tcuda.is_available():
             z = z.cuda()

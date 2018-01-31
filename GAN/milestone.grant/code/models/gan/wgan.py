@@ -53,25 +53,3 @@ class WGAN(GAN):
         self.z_size = z_size
 
         # todo -->
-
-        self.G_optimizer = optim
-
-    def train(self, epoch_num=10):
-        for epoch in range(epoch_num):
-            generator_losses = []
-            discriminator_losses = []
-
-            for x, y in self.train_loader:
-                self.D.zero_grad()
-                batch_size = self.batch_size
-                y_real = torch.ones(batch_size)
-                y_fake = torch.zeros(batch_size)
-
-                if tcuda.is_available():
-                    x, y_real, y_fake = x.cuda(), y_real.cuda(), y_fake.cuda()
-                x, y_real, y_fake = Variable(x), Variable(y_real), Variable(y_fake)
-
-                y_pred = self.D()
-
-    def save(self, generator_path, discriminator_path):
-        super().save(generator_path, discriminator_path)
