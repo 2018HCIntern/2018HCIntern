@@ -16,8 +16,8 @@ class GAN(object):
     def __init__(self, **kwargs):
         super().__init__()
         self.train_loader = kwargs['train_loader']
-        self.G = BaseGenerator(z_size=kwargs['z_size'], x_size=kwargs['x_size'])
-        self.D = BaseDiscriminator(x_size=kwargs['x_size'], y_size=1)
+        self.G = BaseGenerator(**kwargs)
+        self.D = BaseDiscriminator(**kwargs)
         self.z_size = kwargs['z_size']
 
         # todo --> customizable

@@ -49,6 +49,7 @@ def main():
         batch_size=opt.batch_size,
         x_size=x_dim,
         z_size=z_dim,
+        y_size=1,
         lrG=opt.lrG,
         lrD=opt.lrD,
         epoch_num=opt.epoch_num,
