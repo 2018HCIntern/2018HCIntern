@@ -6,9 +6,8 @@ import torch.cuda as tcuda
 from torch.optim.lr_scheduler import MultiStepLR
 from torch.autograd import Variable
 
-from .gan import GAN
+from models.gan import GAN
 
-import pandas as pd
 import logging
 
 logging.basicConfig(level=logging.INFO)
