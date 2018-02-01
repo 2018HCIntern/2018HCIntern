@@ -16,7 +16,7 @@ class BaseGenerator(nn.Module):
         z = F.leaky_relu(self.fc2(z), 0.2)
         z = F.leaky_relu(self.fc3(z), 0.2)
         x = F.tanh(self.fc4(z))
-        return z
+        return x
 
 
 class ConditionalGenerator(nn.Module):
