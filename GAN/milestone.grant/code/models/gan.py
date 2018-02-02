@@ -50,23 +50,19 @@ class GAN:
             y = F.sigmoid(self.fc4(x))
             return y
 
-    def __init__(
-            self, train_loader,
-            batch_size, learning_rate=2e-5,
-            z_size=100, x_size=28*28, y_size=1, class_num=10,
-            verbose=True):
-        self.batch_size = batch_size
-        self.train_loader = train_loader
-        self.G = self.Generator(z_size=z_size, x_size=x_size)
-        self.D = self.Discriminator(x_size=x_size, y_size=y_size)
-        self.z_size = z_size
+    def __init__(self, config):
+        self.batch_size = config.batch_size
+        self.train_loader = config.train_loader
+        self.G = self.Generator(z_size=config.z_size, x_size=config.x_size)
+        self.D = self.Discriminator(x_size=config.x_size, y_size=config.y_size)
+        self.z_size = config.z_size
 
         # todo --> customizable
         self.BCE_loss = nn.BCELoss()
 
         # todo --> customizable
-        self.G_optimizer = optim.Adam(self.G.parameters(), lr=learning_rate)
-        self.D_optimizer = optim.Adam(self.D.parameters(), lr=learning_rate)
+        self.G_optimizer = optim.Adam(self.G.parameters(), lr=config.lrG)
+        self.D_optimizer = optim.Adam(self.D.parameters(), lr=config.lrD)
 
     def train(self, epoch_num=10):
 
@@ -84,7 +80,6 @@ class GAN:
                 y = self.D(x)
                 real_loss = self.BCE_loss(y.squeeze(), y_real)
 
-                # z = torch.randn((self.batch_size, self.z_size))
                 z = torch.rand((self.batch_size, self.z_size))
 
                 if tcuda.is_available():
@@ -100,7 +95,6 @@ class GAN:
                 self.D_optimizer.step()
 
                 self.G.zero_grad()
-                # z = torch.randn((self.batch_size, self.z_size))
                 z = torch.rand((self.batch_size, self.z_size))
 
                 y_fake = torch.ones(self.batch_size)
@@ -121,6 +115,7 @@ class GAN:
                          sum(discriminator_losses) / len(discriminator_losses))
 
     def generate(self, gen_num=10):
+        # z = torch.randn((gen_num, self.z_size))
         z = torch.rand((gen_num, self.z_size))
         if tcuda.is_available():
             z = z.cuda()
