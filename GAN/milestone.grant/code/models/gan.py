@@ -19,6 +19,8 @@ class GAN(object):
         self.G = BaseGenerator(**kwargs)
         self.D = BaseDiscriminator(**kwargs)
         self.z_size = kwargs['z_size']
+        if tcuda.is_available():
+            self.G, self.D = self.G.cuda(), self.D.cuda()
 
         # todo --> customizable
         self.BCE_loss = nn.BCELoss()
