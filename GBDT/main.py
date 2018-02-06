@@ -14,5 +14,3 @@ gbdt=GBDT(X_train,y_train,X_test,y_test)
 
 X_train_leaves, X_test_leaves = gbdt.XGBdt()
 clf = ClassifyingScore(X_train_leaves, y_train, X_test_leaves, y_test)
-
-score = clf.LRscore()

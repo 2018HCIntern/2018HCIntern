@@ -208,7 +208,7 @@ class  StackingFeatures:
 
 class ClassifyingScore:
 
-    def __init__(self,x_train,y_train,x_test,y_test):
+    def __init__(self,x_train,y_train,x_test,y_test, clf='lr'):
         self.bestC = 0
         self.auc_best = 0
         self.acc = 0
@@ -216,7 +216,25 @@ class ClassifyingScore:
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
-
+        if clf=='lr':
+            self.LRscore()
+        elif clf=='nb':
+            self.NBscore()
+        elif clf=='svc':
+            self.SVCscore()
+        elif clf=='knn':
+            self.KNNscore()
+        elif clf=='Perc':
+            self.Pscore()
+        elif clf=='lsv':
+            self.lSVCscore()
+        elif clf=='sgd':
+            self.SGDscore()
+        elif clf=='xgd':
+            self.XGBscore()
+        elif clf=='lgm':
+            self.LightGBMscore()
+        
     def LRscore(self):
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -287,7 +305,7 @@ class ClassifyingScore:
         knn_auc = roc_auc_score(y_test, Y_pred_knn)
         print('GBDT + KNN auc : %.5f' % knn_auc)
 
-    def PercScore(self):
+    def Pscore(self):
 
         X_train_leaves = self.x_train
         y_train = self.y_train
