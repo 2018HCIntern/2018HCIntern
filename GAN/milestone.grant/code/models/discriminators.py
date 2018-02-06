@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class BaseDiscriminator(nn.Module):
-    def __init__(self, x_size, y_size):
+    def __init__(self, x_size, y_size, **kwargs):
         super().__init__()
         self.fc1 = nn.Linear(x_size, 1024)
         self.fc2 = nn.Linear(self.fc1.out_features, 512)
