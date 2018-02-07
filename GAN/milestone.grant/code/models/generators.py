@@ -63,7 +63,7 @@ class BNGenerator(nn.Module):
 
 
 class ConditionalBNGenerator(nn.Module):
-    def __init__(self, z_size, x_size, class_num):
+    def __init__(self, z_size, x_size, class_num, **kwargs):
         super().__init__()
         self.fc1_1 = nn.Linear(z_size, 256)
         self.fc1_1_bn = nn.BatchNorm1d(self.fc1_1.out_features)
