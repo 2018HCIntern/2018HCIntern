@@ -83,7 +83,6 @@ class GBDT:
         X_train = self.x_train
         y_train = self.y_train
         X_test = self.x_test
-        y_test = self.y_test
 
         num_trees = n_trees
         max_depth = max_depth
@@ -93,7 +92,6 @@ class GBDT:
 
 
         lgb_train = lgb.Dataset(X_train, y_train)
-        lgb_eval = lgb.Dataset(X_test, y_test, reference=lgb_train)
 
         # specify your configurations as a dict
         params = {
@@ -107,8 +105,8 @@ class GBDT:
             'feature_fraction': 0.9,
             'bagging_fraction': 0.8,
             'bagging_freq': 5,
-            'verbose': 0,
-            'max_depth':max_depth
+            'verbose': -1,
+            'max_depth': max_depth
 
         }
 
@@ -139,7 +137,7 @@ class GBDT:
         return X_train_leaves_lgb, X_test_leaves_lgb
 
 
-    def get_leaf_indices(ensemble, x):
+    def get_leaf_indices(self, ensemble, x):
         x = x.astype(np.float32)
         trees = ensemble.estimators_
         n_trees = trees.shape[0]
@@ -166,7 +164,7 @@ class GBDT:
 
         gbclf = GradientBoostingClassifier(n_estimators=num_trees, max_depth=max_depth, verbose=0, learning_rate=learning_rate)
         gbclf.fit(X_train, y_train)
-        leaf = get_leaf_indices
+        leaf = self.get_leaf_indices
 
         y_pred = leaf(gbclf, X_train.values)
         num_leaf = np.max(y_pred)
@@ -187,7 +185,7 @@ class  StackingFeatures:
 
 
     def GBDTstack(self, X_train_leaves_xgb, X_test_leaves_xgb, X_train_leaves_lgb, X_test_leaves_lgb, X_train_leaves_gbc, X_test_leaves_gbc):
-
+        print('Stacking Features')
         X_train_leaves_xgb, X_test_leaves_xgb = X_train_leaves_xgb, X_test_leaves_xgb
         X_train_leaves_lgb, X_test_leaves_lgb = X_train_leaves_lgb, X_test_leaves_lgb
         X_train_leaves_gbc, X_test_leaves_gbc = X_train_leaves_gbc, X_test_leaves_gbc
@@ -199,7 +197,7 @@ class  StackingFeatures:
         return X_train_leaves, X_test_leaves
 
     def AddFeature(self, X_train_leaves, X_test_leaves):
-
+        print('Adding Original Feature')
         X_train_ext = hstack([X_train_leaves, X_train])
         X_test_ext = hstack([X_test_leaves, X_test])
 
@@ -208,7 +206,7 @@ class  StackingFeatures:
 
 class ClassifyingScore:
 
-    def __init__(self,x_train,y_train,x_test,y_test, clf='lr'):
+    def __init__(self, x_train, y_train, x_test, y_test, clf='lr'):
         self.bestC = 0
         self.auc_best = 0
         self.acc = 0
@@ -216,33 +214,32 @@ class ClassifyingScore:
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
-        if clf=='lr':
+        if clf == 'lr':
             self.LRscore()
-        elif clf=='nb':
+        elif clf == 'nb':
             self.NBscore()
-        elif clf=='svc':
+        elif clf == 'svc':
             self.SVCscore()
-        elif clf=='knn':
+        elif clf == 'knn':
             self.KNNscore()
-        elif clf=='Perc':
+        elif clf == 'Perc':
             self.Pscore()
-        elif clf=='lsv':
+        elif clf == 'lsv':
             self.lSVCscore()
-        elif clf=='sgd':
+        elif clf == 'sgd':
             self.SGDscore()
-        elif clf=='xgd':
+        elif clf == 'xgd':
             self.XGBscore()
-        elif clf=='lgm':
+        elif clf == 'lgm':
             self.LightGBMscore()
-        
+
     def LRscore(self):
         X_train_leaves = self.x_train
         y_train = self.y_train
         X_test_leaves = self.x_test
         y_test = self.y_test
 
-        auc_best=0
-
+        auc_best = 0
 
         # ---------------------------------------------------------------------------------------------
         # regularization applied testing
@@ -256,14 +253,14 @@ class ClassifyingScore:
             auc = roc_auc_score(y_test, y_pred_est[:, 1])
             if auc_best < auc:
                 auc_best = auc
-                #bestC = c[t]
-                #acc = accuracy_score(y_test, y_pred_est[:, 1].round())
+                # bestC = c[t]
+                # acc = accuracy_score(y_test, y_pred_est[:, 1].round())
 
         # ---------------------------------------------------------------------------------------------
 
-        #print('best C value: %.2f' % bestC)
+        # print('best C value: %.2f' % bestC)
         print('GBDT+LR auc : %.5f' % auc_best)
-        #print('GBDT+LR accuracy: %.5f' % acc)
+        # print('GBDT+LR accuracy: %.5f' % acc)
 
     def NBscore(self):
 
@@ -318,9 +315,7 @@ class ClassifyingScore:
         perc_auc = roc_auc_score(y_test, y_pred_perc)
         print('GBDT + Perceptron auc : %.5f' % perc_auc)
 
-
     def lSVCscore(self):
-
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -332,7 +327,6 @@ class ClassifyingScore:
         y_pred_lin = lin.predict(X_test_leaves)
         lin_auc = roc_auc_score(y_test, y_pred_lin)
         print('GBDT + Linear SVC auc : %.5f' % lin_auc)
-
 
     def SGDscore(self):
 
@@ -347,8 +341,6 @@ class ClassifyingScore:
         sgd_auc = roc_auc_score(y_test, Y_pred_sgd)
         print('GBDT + SGD auc : %.5f' % sgd_auc)
 
-
-
     def XGBscore(self):
 
         X_train_leaves = self.x_train
@@ -361,15 +353,12 @@ class ClassifyingScore:
         xgb_auc = roc_auc_score(y_test, Y_pred_xgb)
         print('GBDT + XGB auc: %.5f' % xgb_auc)
 
-
-
     def LightGBMscore(self):
 
         X_train_leaves = self.x_train
         y_train = self.y_train
         X_test_leaves = self.x_test
         y_test = self.y_test
-
 
         params = {
             'task': 'train',
@@ -397,4 +386,5 @@ class ClassifyingScore:
         lgb_auc2 = roc_auc_score(y_test, y_pred_lgb2)
 
         print('GBDT + lightGBM auc : %.5f' % lgb_auc2)
+
 
