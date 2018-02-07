@@ -196,7 +196,7 @@ class  StackingFeatures:
 
         return X_train_leaves, X_test_leaves
 
-    def AddFeature(self, X_train_leaves, X_test_leaves):
+    def AddFeature(self, X_train_leaves, X_test_leaves, X_train, X_test):
         print('Adding Original Feature')
         X_train_ext = hstack([X_train_leaves, X_train])
         X_test_ext = hstack([X_test_leaves, X_test])
