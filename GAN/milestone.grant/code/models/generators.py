@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class BaseGenerator(nn.Module):
-    def __init__(self, z_size, x_size):
+    def __init__(self, z_size, x_size, **kwargs):
         super().__init__()
         self.fc1 = nn.Linear(z_size, 256)
         self.fc2 = nn.Linear(self.fc1.out_features, 512)
@@ -16,11 +16,11 @@ class BaseGenerator(nn.Module):
         z = F.leaky_relu(self.fc2(z), 0.2)
         z = F.leaky_relu(self.fc3(z), 0.2)
         x = F.tanh(self.fc4(z))
-        return z
+        return x
 
 
 class ConditionalGenerator(nn.Module):
-    def __init__(self, z_size, x_size, class_num):
+    def __init__(self, z_size, x_size, class_num, **kwargs):
         super().__init__()
         self.fc1_1 = nn.Linear(z_size, 256)
         self.fc1_2 = nn.Linear(class_num, 256)
