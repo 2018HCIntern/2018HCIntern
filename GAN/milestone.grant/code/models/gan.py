@@ -95,10 +95,13 @@ class GAN(object):
         self.G.train()
         return pd.DataFrame(
             results.data.numpy(),
-            columns=self.train_loader.dataset.df.columns.drop([self.train_loader.dataset.y_attr])
+            columns=self.train_loader.dataset.df.columns.drop([self.train_loader.dataset.y_label])
         )
 
 
     def save(self, generator_path, discriminator_path):
         torch.save(self.G.state_dict(), generator_path)
         torch.save(self.D.state_dict(), discriminator_path)
+
+    def draw(self):
+        pass

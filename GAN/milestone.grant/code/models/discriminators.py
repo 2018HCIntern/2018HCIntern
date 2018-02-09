@@ -23,7 +23,7 @@ class BaseDiscriminator(nn.Module):
 
 
 class ConditionalDiscriminator(nn.Module):
-    def __init__(self, x_size, y_size, class_num):
+    def __init__(self, x_size, y_size, class_num, **kwargs):
         super().__init__()
         self.fc1_1 = nn.Linear(x_size, 1024)
         self.fc1_2 = nn.Linear(class_num, 1024)
@@ -70,7 +70,7 @@ class BNDiscriminator(nn.Module):
 
 
 class ConditionalBNDiscriminator(nn.Module):
-    def __init__(self, x_size, y_size, class_num):
+    def __init__(self, x_size, y_size, class_num, **kwargs):
         super().__init__()
         self.fc1_1 = nn.Linear(x_size, 1024)
         self.fc1_2 = nn.Linear(class_num, 1024)
