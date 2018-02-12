@@ -1,3 +1,5 @@
+
+
 import numpy as np
 import pandas as pd
 import xgboost as xgb
@@ -22,10 +24,26 @@ import math
 import warnings
 
 warnings.filterwarnings('ignore')
+'''
+    GBDT
+    ~~~~
 
+'''
 
 class GBDT:
+    ''' Class to transform features by using GradientBoostingClassifier, lightGBM, and XGBoost.
 
+
+     x_train : X train dataframe to transform to leaves
+
+     y_train : y dataframe to fit and train trees
+
+     x_test : X test dataframe to transform to leaves
+
+     y_test : y dataframe to test
+
+
+     '''
     def __init__(self, x_train, y_train, x_test, y_test):
         self.x_train = x_train
         self.y_train = y_train
@@ -36,10 +54,15 @@ class GBDT:
 
 
 
-
-
     def XGBdt(self, n_trees=30, max_depth=7, learning_rate=0.1):
+        '''Transforming feature by using XGBoost
 
+
+        :param n_trees: number of trees. Default = 30
+        :param max_depth:  max depth of trees. Default = 7
+        :param learning_rate: learning rate. Default = 0.1
+        :return: X_train_leaves, X_test_leaves
+        '''
 
         X_train = self.x_train
         y_train = self.y_train
@@ -79,7 +102,13 @@ class GBDT:
 
 
     def LightGBMdt(self, n_trees=30, max_depth=7, learning_rate=0.1):
+        '''Transforming feature by using lightGBM
 
+        :param n_trees: number of trees. Default = 30
+        :param max_depth:  max depth of trees. Default = 7
+        :param learning_rate: learning rate. Default = 0.1
+        :return: X_train_leaves, X_test_leaves
+        '''
         X_train = self.x_train
         y_train = self.y_train
         X_test = self.x_test
@@ -138,6 +167,12 @@ class GBDT:
 
 
     def get_leaf_indices(self, ensemble, x):
+        '''Function to get leaf indices
+
+        :param ensemble: Type of classifier
+        :param x: Input to transform
+        :return: leaves
+        '''
         x = x.astype(np.float32)
         trees = ensemble.estimators_
         n_trees = trees.shape[0]
@@ -152,7 +187,13 @@ class GBDT:
 
 
     def GBCdt(self, n_trees=30, max_depth=7, learning_rate=0.1):
+        ''' Transforming feature by using GradientBoostingClassifier.
 
+        :param n_trees: number of trees. Default = 30
+        :param max_depth:  max depth of trees. Default = 7
+        :param learning_rate: learning rate. Default = 0.1
+        :return: X_train_leaves, X_test_leaves
+        '''
         X_train =self.x_train
         y_train = self.y_train
         X_test = self.x_test
@@ -182,9 +223,21 @@ class GBDT:
         return X_train_leaves_gbc, X_test_leaves_gbc
 
 class  StackingFeatures:
+    '''Class for stacking transformed features or adding original feature.
 
+    '''
 
-    def GBDTstack(self, X_train_leaves_xgb, X_test_leaves_xgb, X_train_leaves_lgb, X_test_leaves_lgb, X_train_leaves_gbc, X_test_leaves_gbc):
+    def GBDTstack(X_train_leaves_xgb, X_test_leaves_xgb, X_train_leaves_lgb, X_test_leaves_lgb, X_train_leaves_gbc, X_test_leaves_gbc):
+        '''Stacking transformed features and return stacked leaves
+
+        :param X_train_leaves_xgb: train leaves from XGBoost
+        :param X_test_leaves_xgb:  test leaves from XGBoost
+        :param X_train_leaves_lgb: train leaves from lightGBM
+        :param X_test_leaves_lgb:  test leaves from lightGBM
+        :param X_train_leaves_gbc: train leaves from GradientBoostingClassifier
+        :param X_test_leaves_gbc:  test leaves from GradientBoostingClassifier
+        :return: X_train_leaves, X_test_leaves
+        '''
         print('Stacking Features')
         X_train_leaves_xgb, X_test_leaves_xgb = X_train_leaves_xgb, X_test_leaves_xgb
         X_train_leaves_lgb, X_test_leaves_lgb = X_train_leaves_lgb, X_test_leaves_lgb
@@ -196,7 +249,15 @@ class  StackingFeatures:
 
         return X_train_leaves, X_test_leaves
 
-    def AddFeature(self, X_train_leaves, X_test_leaves, X_train, X_test):
+    def AddFeature(X_train_leaves, X_test_leaves, X_train, X_test):
+        '''Adding transformed feature with original features
+
+        :param X_train_leaves: Transformed train set
+        :param X_test_leaves: Transformed test set
+        :param X_train: original train set
+        :param X_test: original test set
+        :return: X_train, X_test
+        '''
         print('Adding Original Feature')
         X_train_ext = hstack([X_train_leaves, X_train])
         X_test_ext = hstack([X_test_leaves, X_test])
@@ -207,6 +268,14 @@ class  StackingFeatures:
 class ClassifyingScore:
 
     def __init__(self, x_train, y_train, x_test, y_test, clf='lr'):
+        '''Class to score AUC by using following classification method
+
+        :param x_train: X train
+        :param y_train: y train
+        :param x_test: X test
+        :param y_test: y test
+        :param clf: classifier to score AUC. Default = Logistic Regression(lr)
+        '''
         self.bestC = 0
         self.auc_best = 0
         self.acc = 0
@@ -234,6 +303,10 @@ class ClassifyingScore:
             self.LightGBMscore()
 
     def LRscore(self):
+        '''
+
+        :return: AUC score by using Logistic Regression Logistic Regression
+        '''
         X_train_leaves = self.x_train
         y_train = self.y_train
         X_test_leaves = self.x_test
@@ -263,6 +336,10 @@ class ClassifyingScore:
         # print('GBDT+LR accuracy: %.5f' % acc)
 
     def NBscore(self):
+        '''
+
+        :return: AUC score by using Gaussian Naive bayes Classifier
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -277,6 +354,10 @@ class ClassifyingScore:
         print('GBDT + GNB auc: %.5f' % gnb_auc)
 
     def SVCscore(self):
+        '''
+
+        :return: AUC score by using Support Vector Classifier
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -290,6 +371,10 @@ class ClassifyingScore:
         print('GBDT + SVC auc: %.5f' % svc_auc)
 
     def KNNscore(self):
+        '''
+
+        :return: AUC score by using K-neighbors Classifier
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -303,6 +388,10 @@ class ClassifyingScore:
         print('GBDT + KNN auc : %.5f' % knn_auc)
 
     def Pscore(self):
+        '''
+
+        :return: AUC score by using Perceptron
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -316,6 +405,10 @@ class ClassifyingScore:
         print('GBDT + Perceptron auc : %.5f' % perc_auc)
 
     def lSVCscore(self):
+        '''
+
+        :return: AUC score by using linear Support Vector Classifier
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -329,6 +422,10 @@ class ClassifyingScore:
         print('GBDT + Linear SVC auc : %.5f' % lin_auc)
 
     def SGDscore(self):
+        '''
+
+        :return: AUC score by using Stochastic Gradient Descent
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -342,6 +439,10 @@ class ClassifyingScore:
         print('GBDT + SGD auc : %.5f' % sgd_auc)
 
     def XGBscore(self):
+        '''
+
+        :return: AUC score by using XGBoost
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
@@ -354,6 +455,10 @@ class ClassifyingScore:
         print('GBDT + XGB auc: %.5f' % xgb_auc)
 
     def LightGBMscore(self):
+        '''
+
+        :return: AUC score by using lightGBM
+        '''
 
         X_train_leaves = self.x_train
         y_train = self.y_train
