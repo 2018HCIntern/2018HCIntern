@@ -1,0 +1,393 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GBDT.GBDT module &#8212; GBDT  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="conf module" href="conf.html" />
+    <link rel="prev" title="GBDT package" href="GBDT.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-GBDT.GBDT">
+<span id="gbdt-gbdt-module"></span><h1>GBDT.GBDT module<a class="headerlink" href="#module-GBDT.GBDT" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="GBDT.GBDT.ClassifyingScore">
+<em class="property">class </em><code class="descclassname">GBDT.GBDT.</code><code class="descname">ClassifyingScore</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_test</em>, <em>y_test</em>, <em>clf='lr'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.KNNscore">
+<code class="descname">KNNscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.KNNscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.KNNscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using K-neighbors Classifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.LRscore">
+<code class="descname">LRscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.LRscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.LRscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using Logistic Regression Logistic Regression</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.LightGBMscore">
+<code class="descname">LightGBMscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.LightGBMscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.LightGBMscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using lightGBM</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.NBscore">
+<code class="descname">NBscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.NBscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.NBscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using Gaussian Naive bayes Classifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.Pscore">
+<code class="descname">Pscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.Pscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.Pscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using Perceptron</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.SGDscore">
+<code class="descname">SGDscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.SGDscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.SGDscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using Stochastic Gradient Descent</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.SVCscore">
+<code class="descname">SVCscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.SVCscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.SVCscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using Support Vector Classifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.XGBscore">
+<code class="descname">XGBscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.XGBscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.XGBscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using XGBoost</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.ClassifyingScore.lSVCscore">
+<code class="descname">lSVCscore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#ClassifyingScore.lSVCscore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.ClassifyingScore.lSVCscore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">AUC score by using linear Support Vector Classifier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GBDT.GBDT.GBDT">
+<em class="property">class </em><code class="descclassname">GBDT.GBDT.</code><code class="descname">GBDT</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_test</em>, <em>y_test</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#GBDT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.GBDT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class to transform features by using GradientBoostingClassifier, lightGBM, and XGBoost.</p>
+<p>x_train : X train dataframe to transform to leaves</p>
+<p>y_train : y dataframe to fit and train trees</p>
+<p>x_test : X test dataframe to transform to leaves</p>
+<p>y_test : y dataframe to test</p>
+<dl class="method">
+<dt id="GBDT.GBDT.GBDT.GBCdt">
+<code class="descname">GBCdt</code><span class="sig-paren">(</span><em>n_trees=30</em>, <em>max_depth=7</em>, <em>learning_rate=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#GBDT.GBCdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.GBDT.GBCdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforming feature by using GradientBoostingClassifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_trees</strong> – number of trees. Default = 30</li>
+<li><strong>max_depth</strong> – max depth of trees. Default = 7</li>
+<li><strong>learning_rate</strong> – learning rate. Default = 0.1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X_train_leaves, X_test_leaves</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.GBDT.LightGBMdt">
+<code class="descname">LightGBMdt</code><span class="sig-paren">(</span><em>n_trees=30</em>, <em>max_depth=7</em>, <em>learning_rate=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#GBDT.LightGBMdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.GBDT.LightGBMdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforming feature by using lightGBM</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_trees</strong> – number of trees. Default = 30</li>
+<li><strong>max_depth</strong> – max depth of trees. Default = 7</li>
+<li><strong>learning_rate</strong> – learning rate. Default = 0.1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X_train_leaves, X_test_leaves</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.GBDT.XGBdt">
+<code class="descname">XGBdt</code><span class="sig-paren">(</span><em>n_trees=30</em>, <em>max_depth=7</em>, <em>learning_rate=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#GBDT.XGBdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.GBDT.XGBdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforming feature by using XGBoost</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_trees</strong> – number of trees. Default = 30</li>
+<li><strong>max_depth</strong> – max depth of trees. Default = 7</li>
+<li><strong>learning_rate</strong> – learning rate. Default = 0.1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X_train_leaves, X_test_leaves</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.GBDT.get_leaf_indices">
+<code class="descname">get_leaf_indices</code><span class="sig-paren">(</span><em>ensemble</em>, <em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#GBDT.get_leaf_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.GBDT.get_leaf_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get leaf indices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ensemble</strong> – Type of classifier</li>
+<li><strong>x</strong> – Input to transform</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">leaves</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GBDT.GBDT.StackingFeatures">
+<em class="property">class </em><code class="descclassname">GBDT.GBDT.</code><code class="descname">StackingFeatures</code><a class="reference internal" href="_modules/GBDT/GBDT.html#StackingFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.StackingFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class for stacking transformed features or adding original feature.</p>
+<dl class="method">
+<dt id="GBDT.GBDT.StackingFeatures.AddFeature">
+<code class="descname">AddFeature</code><span class="sig-paren">(</span><em>X_train_leaves</em>, <em>X_test_leaves</em>, <em>X_train</em>, <em>X_test</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#StackingFeatures.AddFeature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.StackingFeatures.AddFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adding transformed feature with original features</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X_train_leaves</strong> – Transformed train set</li>
+<li><strong>X_test_leaves</strong> – Transformed test set</li>
+<li><strong>X_train</strong> – original train set</li>
+<li><strong>X_test</strong> – original test set</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X_train, X_test</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GBDT.GBDT.StackingFeatures.GBDTstack">
+<code class="descname">GBDTstack</code><span class="sig-paren">(</span><em>X_train_leaves_xgb</em>, <em>X_test_leaves_xgb</em>, <em>X_train_leaves_lgb</em>, <em>X_test_leaves_lgb</em>, <em>X_train_leaves_gbc</em>, <em>X_test_leaves_gbc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GBDT/GBDT.html#StackingFeatures.GBDTstack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GBDT.GBDT.StackingFeatures.GBDTstack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stacking transformed features and return stacked leaves</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X_train_leaves_xgb</strong> – train leaves from XGBoost</li>
+<li><strong>X_test_leaves_xgb</strong> – test leaves from XGBoost</li>
+<li><strong>X_train_leaves_lgb</strong> – train leaves from lightGBM</li>
+<li><strong>X_test_leaves_lgb</strong> – test leaves from lightGBM</li>
+<li><strong>X_train_leaves_gbc</strong> – train leaves from GradientBoostingClassifier</li>
+<li><strong>X_test_leaves_gbc</strong> – test leaves from GradientBoostingClassifier</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X_train_leaves, X_test_leaves</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">GBDT</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="GBDT.html">GBDT package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="GBDT.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">GBDT.GBDT module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GBDT.html#module-GBDT">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="conf.html">conf module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="GBDT.html">GBDT package</a><ul>
+      <li>Previous: <a href="GBDT.html" title="previous chapter">GBDT package</a></li>
+      <li>Next: <a href="conf.html" title="next chapter">conf module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/GBDT.GBDT.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
