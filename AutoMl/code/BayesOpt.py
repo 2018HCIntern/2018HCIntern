@@ -145,4 +145,4 @@ def run(dataInput, TrainInput) :
     start_time = time.time()
     bayesOPT.maximize(init_points=n_init_points, n_iter=n_iters)
     elapsed_time = time.time() - start_time
-    print("elapsed time : %s" % elapsed_time)
+    print("elapsed time : %s min %s sec" % (int(elapsed_time / 60), int(elapsed_time % 60)))

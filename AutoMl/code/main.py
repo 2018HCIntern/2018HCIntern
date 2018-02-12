@@ -97,19 +97,24 @@ def mainRun() :
   elif optInput == 3 :
     BayesOpt.run(dataInput, trainInput)
   elif optInput == 2 :
-    GridSearch.run(dataInput, trainInput)
-  else : 
-    if dataInput == 3 : 
-      print("If you are not using Optimizer, you need to select data 1 or 2")
-      dataInput = int(input()) 
-      while ((dataInput != 1) & (dataInput != 2)) : 
+    if dataInput == 3:
+      print("If you are using GridSearch, you need to select data 1 or 2")
+      dataInput = int(input())
+      while ((dataInput != 1) & (dataInput != 2)):
         print("Wrong input value, type again(1 or 2)")
         dataInput = int(input())
-    else : 
-      if trainInput == 1 : 
-        xgboostTrain(dataInput)
-      else : 
-        lightgbmTrain(dataInput)
+    GridSearch.run(dataInput, trainInput)
+  else : 
+    if dataInput == 3 :
+      print("If you are not using Optimizer, you need to select data 1 or 2")
+      dataInput = int(input())
+      while ((dataInput != 1) & (dataInput != 2)) :
+        print("Wrong input value, type again(1 or 2)")
+        dataInput = int(input())
+    if trainInput == 1 :
+      xgboostTrain(dataInput)
+    else :
+      lightgbmTrain(dataInput)
   print("Type 0 to exit, anything else to continue")
   exitInput = input()
   while (exitInput != "0") : 
